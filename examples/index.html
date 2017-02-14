@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Brightcove New Player Embed</title>
+<style>
+.video-js {
+	height: 440px;
+	width: 560px;
+}
+</style>
+</head>
+<body>
+
+  <video id="myPlayer" data-video-id="5098698941001"
+  data-account="5092057275001"
+  data-player="rkMWuWab6"
+  data-embed="default"
+  data-application-id
+  class="video-js"
+  controls
+  width="600"
+  height="360"
+  ></video>
+  <script src="//players.brightcove.net/5092057275001/rkMWuWab6_default/index.min.js"></script>
+
+<link href="../dist/brightcove-multi-playlist.css" rel="stylesheet">
+
+<script src="../dist/brightcove-multi-playlist.js"></script>
+
+<script>
+  var myPlayer;
+
+  videojs('myPlayer').ready(function() {
+		myPlayer = this;
+    var options={
+    "playlists": [{
+    "id": "5098574651001",
+    }, {
+    "id": "5096751764001",
+    }, {
+    "id": "5096419184001"
+    }]
+  };			myPlayer.multiPlaylist(options);
+	});
+
+</script>
+
+</body>
+</html>

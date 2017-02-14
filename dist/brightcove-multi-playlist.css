@@ -1,0 +1,7 @@
+/**
+ * brightcove-multi-playlist
+ * @version 0.0.1
+ * @copyright 2017 Kevin Reynolds
+ * @license Apache-2.0
+ */
+.vjs-playlist-button{font-family:VideoJS}.vjs-playlist-button:before{content:"\f10e"}.vjs-playlist-button:hover .playlistModal{position:absolute;display:block;cursor:pointer;visibility:visible;list-style-position:outside;left:-6em;bottom:3em;margin-bottom:1.5em;height:10em;width:12em;max-height:600px}.vjs-menu.playlistModal li{justify-content:center;border-style:solid}.vjs-playlist-title{background-color:#151B17;margin:0.3em 0;padding:0.5em;border-radius:0.3em;line-height:1.4em;font-size:1.2em;text-align:center;text-transform:lowercase}

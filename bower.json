@@ -1,0 +1,12 @@
+{
+  "name": "brightcove-multi-playlist",
+  "author": "Brightcove, Inc.",
+  "license": "Apache-2.0",
+  "main": [
+    "dist/brightcove-multi-playlist.min.js"
+  ],
+  "keywords": [
+    "videojs",
+    "videojs-plugin"
+  ]
+}
