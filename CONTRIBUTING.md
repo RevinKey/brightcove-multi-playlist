@@ -26,5 +26,5 @@ Testing is a crucial part of any software project. For all but the most trivial 
 
 
 [karma]: http://karma-runner.github.io/
-[local]: http://localhost:9999/test/
+[local]: http://localhost:9999/examples/
 [standards]: https://github.com/videojs/generator-videojs-plugin/docs/standards.md
