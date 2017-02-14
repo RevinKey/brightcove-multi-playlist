@@ -8,10 +8,8 @@ brightcove-multi-playlist is a plugin for the Brightcove Player that will Add su
 
 
 ### What's Next?
- - Converting modules to Classes
- - Converting to use Brightcove's Plugin Framework
  - Additional Functionality
- - Installation Instructions
+ - add episodes to each playlist
  - More Documentation
  - ????
 
