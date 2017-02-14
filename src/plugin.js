@@ -131,9 +131,9 @@ var playlistModalButton = videojs.extend(videojs.Button, {
     },
 
     createEl: function() {
-        return videojs.Button.prototype.createEl.call(this, 'button', {
+        return videojs.Button.prototype.createEl.call(this, 'div', {
             className: 'vjs-playlist-button vjs-menu-button vjs-menu-button-popup vjs-control vjs-button',
-            innerHTML: '<div class="vjs-menu playlistModal vjs-icons-chapters" role="presentation"><ul class="vjs-playlist-menu"role="menu"></ul></div><span class="vjs-control-text">Playlist</span></div>'
+            innerHTML: '<div class="vjs-menu playlistModal vjs-icons-chapters" role="presentation"><ul class="vjs-playlist-menu vjs-menu-content"role="menu"></ul></div><span class="vjs-control-text">Playlist</span></div>'
         }, {
             'aria-live': 'polite',
         });
