@@ -13,7 +13,12 @@ let _options,
     lastEvent = "",
     currentEvent = "",
     Modal,
+    playlistModal,
+    child,
+    playlistTitle,
+    data,
     id,
+    childString,
     allPlayerEventsJSON,
     allPlayerEvents = [],
     currentDuration,
@@ -25,6 +30,7 @@ let _options,
         list: 'list',
         json: 'json'
     };
+
 // Array of events I came up with by watching debugger window and using documentation
 let playerEvents = [
     'ready', // vidojs_component
@@ -139,41 +145,63 @@ var playlistModalButton = videojs.extend(videojs.Button, {
         });
     }
 });
+
+function findClass(element, className) {
+    var foundElement = null,
+        found;
+
+    function recurse(element, className, found) {
+        for (var i = 0; i < element.childNodes.length && !found; i++) {
+            var el = element.childNodes[i];
+            var classes = el.className != undefined ? el.className.split(" ") : [];
+            for (var j = 0, jl = classes.length; j < jl; j++) {
+                if (classes[j] == className) {
+                    found = true;
+                    foundElement = element.childNodes[i];
+                    break;
+                }
+            }
+            if (found)
+                break;
+            recurse(element.childNodes[i], className, found);
+        }
+    }
+    recurse(element, className, false);
+    return foundElement;
+}
+
+
 let buildContainer = (player) => {
     videojs.registerComponent("playlistModalButton", playlistModalButton);
 
     var buttonIndex = player.controlBar.children().map(function(c) {
         return c.name();
     }).indexOf('FullscreenToggle') - 1;
-    player.controlBar.testButton = player.controlBar.addChild('playlistModalButton', null, buttonIndex);
-    player.controlBar.testButton.el().setAttribute('tabindex', 0);
-    for (var j = 0; j < player.controlBar.testButton.el_.childNodes.length; j++) {
-        if (player.controlBar.testButton.el_.childNodes[j].className === "vjs-menu playlistModal vjs-icons-chapters") {
-            for (var i = 0; i < _options.playlists.length; i++) {
+    player.controlBar.playlistButton = player.controlBar.addChild('playlistModalButton', null, buttonIndex);
+    player.controlBar.playlistButton.el().setAttribute('tabindex', 0);
 
-                var playlist1 = player.controlBar.testButton.el_.childNodes[j];
-                playlist1 = playlist1.childNodes[0];
-                player.catalog.getPlaylist(_options.playlists[i].id, function(error, playlist) {
-                    player.catalog.load(playlist);
-                    playlist1.innerHTML += "<li class='vjs-playlist-title vjs-menu-item' id='"+player.catalog.data.id +"'>" + player.catalog.data.name + "</li>";
-                    for(var z=0;z < playlist1.childNodes.length; z++){
-                    playlist1.childNodes[z].addEventListener('click', function(evt){
-                        player.catalog.getPlaylist(evt.currentTarget.id, function(error, playlist){
-                            player.pause();
-                            player.catalog.load(playlist);
-                            player.playlist.currentItem(0);
-                            player.play();
-                        });
+    playlistModal = findClass(player.controlBar.playlistButton.el_, "vjs-playlist-menu");
+    console.log(playlistModal);
+    for (var i = 0; i < _options.playlists.length; i++) {
+        player.catalog.getPlaylist(_options.playlists[i].id, function(error, playlist) {
+            player.catalog.load(playlist);
+            data = player.catalog.data;
+            childString = "<li class='vjs-playlist-title vjs-menu-item' id='" + data.id + "'>" + data.name + "</li><ul></ul>";
+            playlistModal.innerHTML += childString;
+            for (var j = 0; j < playlistModal.childNodes.length; j++) {
+
+                playlistModal.childNodes[j].addEventListener('click', function(evt) {
+                    player.catalog.getPlaylist(evt.currentTarget.id, function(error, playlist) {
+                        player.catalog.load(playlist);
+                        for(var z=0; z< playlist.length;z++){
+                            childString = "<li class='vjs-video-title vjs-menu-item' id='" + playlist[z].id + "'>" + playlist[z].name + "</li>";
+                            evt.target.innerHTML += childString;
+                        }
                     });
-                };
                 });
-            }
-        } else {
-            console.log("false");
-        }
-
-    }
-
+            };
+        });
+    };
 };
 
 
