@@ -193,10 +193,12 @@ let buildContainer = (player) => {
                 playlistModal.childNodes[j].addEventListener('click', function(evt) {
                     player.catalog.getPlaylist(evt.currentTarget.id, function(error, playlist) {
                         player.catalog.load(playlist);
-                        for(var z=0; z< playlist.length;z++){
+                        player.playlist.currentItem(0);
+                        player.play();
+                        /*for(var z=0; z< playlist.length;z++){
                             childString = "<li class='vjs-video-title vjs-menu-item' id='" + playlist[z].id + "'>" + playlist[z].name + "</li>";
                             evt.target.innerHTML += childString;
-                        }
+                        }*/
                     });
                 });
             };
