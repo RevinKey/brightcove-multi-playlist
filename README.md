@@ -29,12 +29,7 @@ brightcove-multi-playlist uses a number of open source projects to work properly
 npm install
 ```
 
-### Build steps
 
-Build the plugin
-```sh
-npm run build
-```
 
 Run the http-server to view the sample player implementation
 ```sh
