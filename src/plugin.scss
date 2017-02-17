@@ -17,10 +17,14 @@
         visibility: visible;
         height: 20em;
         width: 20em;
+
     }
 
 }
-
+#vjs-playlist-menu{
+    overflow-x: hidden;
+    width:11em;
+}
 .vjs-menu.playlistModal li {
     justify-content: center;
     border-style: solid;
