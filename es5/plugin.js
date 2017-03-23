@@ -45,7 +45,7 @@ var playlistModalButton = videojs.extend(videojs.Button, {
     createEl: function createEl() {
         return videojs.Button.prototype.createEl.call(this, 'div', {
             className: 'vjs-playlist-button vjs-menu-button vjs-menu-button-popup vjs-control vjs-button',
-            innerHTML: '<div class="vjs-menu playlistModal vjs-icons-chapters" role="presentation"><ul id="vjs-playlist-menu" class="vjs-playlist-menu vjs-menu-content"role="menu"><div style="text-align:left;">Playlists</div></ul></div><span class="vjs-control-text">Playlist</span></div>'
+            innerHTML: '<div class="vjs-menu playlistModal vjs-icons-chapters" role="presentation"><ul id="vjs-playlist-menu" class="vjs-playlist-menu vjs-menu-content"role="menu"></ul></div><span class="vjs-control-text">Playlist</span></div>'
         }, {
             'aria-live': 'polite'
         });
@@ -89,21 +89,30 @@ var buildContainer = function buildContainer(player) {
     for (var i = 0; i < _options.playlists.length; i++) {
         player.catalog.getPlaylist(_options.playlists[i].id, function (error, playlist) {
             data = player.catalog.data;
-            childString = "<li class='vjs-playlist-title ' id='" + data.id + "'>" + data.name + "</li><ul>";
+            childString = "<li class='vjs-playlist-title' id='" + data.id + "'>" + data.name + "</li><ul style='display:none;'>";
             for (var j = 0; j < playlist.length; j++) {
-                childString += "<div class='vjs-video-title vjs-menu-item' playlistId='" + data.id + "'id='" + playlist[j].id + "'><img class='vjs-thumbnail' src=" + playlist[j].thumbnail + "></img>" + playlist[j].name + "</div>";
+                childString += "<div class='vjs-video-title vjs-menu-item' playlistId='" + data.id + "'id='" + playlist[j].id + "'>" + playlist[j].name + "<img class='vjs-thumbnail' style='pointer-events:none;'src=" + playlist[j].thumbnail + "></img></div>";
             }
             childString += "</ul>";
             playlistModal.innerHTML += childString;
             for (var x = 0; x < playlistModal.childNodes.length; x++) {
                 var temp = playlistModal.childNodes;
-                if (playlistModal.childNodes[x].className === 'vjs-playlist-title vjs-menu-item') {
+                if (playlistModal.childNodes[x].className === 'vjs-playlist-title') {
                     playlistModal.childNodes[x].addEventListener('click', function (evt) {
-                        player.catalog.getPlaylist(evt.currentTarget.id, function (error, playlist) {
-                            player.catalog.load(playlist);
-                            player.playlist.currentItem(0);
-                            player.play();
-                        });
+                        if (x = 0) {
+                            player.catalog.getPlaylist(evt.currentTarget.id, function (error, playlist) {
+                                player.catalog.load(playlist);
+                                player.playlist.currentItem(0);
+                                player.play();
+                            });
+                        }
+
+                        evt.stopPropagation();
+                        if (evt.target.nextSibling.style.display === "none") {
+                            evt.target.nextSibling.style.display = "block";
+                        } else {
+                            evt.target.nextSibling.style.display = "none";
+                        }
                     });
                 } else if (playlistModal.childNodes[x].tagName === 'UL') {
                     var temp = playlistModal.childNodes[x];

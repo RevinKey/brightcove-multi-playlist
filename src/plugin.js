@@ -83,11 +83,18 @@ let buildContainer = (player) => {
     playlistModal = findClass(player.controlBar.playlistButton.el_, "vjs-playlist-menu");
     console.log(playlistModal);
     for (var i = 0; i < _options.playlists.length; i++) {
+        if(i==0){
+            player.catalog.getPlaylist(_options.playlists[i].id, function(error, playlist) {
+                player.catalog.load(playlist);
+                player.playlist.currentItem(0);
+                player.play();
+            });
+        }
         player.catalog.getPlaylist(_options.playlists[i].id, function(error, playlist) {
             data = player.catalog.data;
             childString = "<li class='vjs-playlist-title' id='" + data.id + "'>" + data.name + "</li><ul style='display:none;'>";
             for (var j = 0; j < playlist.length; j++) {
-                childString += "<div class='vjs-video-title vjs-menu-item' playlistId='" + data.id + "'id='" + playlist[j].id + "'>" + playlist[j].name +"<img class='vjs-thumbnail' style='pointer-events:none;'src="+playlist[j].thumbnail +"></img></div>";
+                childString += "<div class='vjs-video-title vjs-menu-item' playlistId='" + data.id + "'id='" + playlist[j].id + "'>" + playlist[j].name + "<img class='vjs-thumbnail' style='pointer-events:none;'src=" + playlist[j].thumbnail + "></img></div>";
             }
             childString += "</ul>";
             playlistModal.innerHTML += childString;
@@ -95,27 +102,23 @@ let buildContainer = (player) => {
                 var temp = playlistModal.childNodes;
                 if (playlistModal.childNodes[x].className === 'vjs-playlist-title') {
                     playlistModal.childNodes[x].addEventListener('click', function(evt) {
-                        /*player.catalog.getPlaylist(evt.currentTarget.id, function(error, playlist) {
-                            player.catalog.load(playlist);
-                            player.playlist.currentItem(0);
-                            player.play();
-                        });*/
+
                         evt.stopPropagation();
-                        if(evt.target.nextSibling.style.display==="none"){
-                        evt.target.nextSibling.style.display="block";
-                    }else{
-                        evt.target.nextSibling.style.display="none";
-                    }
+                        if (evt.target.nextSibling.style.display === "none") {
+                            evt.target.nextSibling.style.display = "block";
+                        } else {
+                            evt.target.nextSibling.style.display = "none";
+                        }
 
                     });
                 } else if (playlistModal.childNodes[x].tagName === 'UL') {
                     var temp = playlistModal.childNodes[x];
                     for (var z = 0; z < temp.childNodes.length; z++) {
                         temp.childNodes[z].addEventListener('click', function(evt) {
-                            player.catalog.getPlaylist(evt.currentTarget.attributes.playlistId.value, function(error, playlist){
+                            player.catalog.getPlaylist(evt.currentTarget.attributes.playlistId.value, function(error, playlist) {
                                 player.catalog.load(playlist);
-                                for(var k =0; k < playlist.length; k++){
-                                    if(evt.target.id === playlist[k].id){
+                                for (var k = 0; k < playlist.length; k++) {
+                                    if (evt.target.id === playlist[k].id) {
                                         player.playlist.currentItem(k);
                                         player.play();
                                     }
