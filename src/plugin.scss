@@ -16,29 +16,28 @@
         cursor: pointer;
         visibility: visible;
         height: 20em;
-        width: 20em;
+        width: 25em;
 
     }
 
 }
-#vjs-playlist-menu{
+.vjs-thumbnail{
+    width:85px;
+}
+.vjs-playlist-menu{
     overflow-x: hidden;
-    width:11em;
+    width:25em;
 }
 .vjs-menu.playlistModal li {
-    justify-content: center;
-    border-style: solid;
-}
-
-.vjs-playlist-title {
     background-color: #151B17;
     margin: 0.3em 0;
     padding: 0.5em;
     border-radius: 0.3em;
-    line-height: 1.4em;
+    line-height: .5em;
     font-size: 1.2em;
     text-align: center;
-    text-transform: lowercase;
 }
+
+
 
 .video-js {}

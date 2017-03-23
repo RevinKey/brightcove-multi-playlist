@@ -1,47 +1,53 @@
-import PlaylistContainer from './js/playlistContainer.js';
-import {
-    IDs
-} from './js/componentIDs.js';
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _jsPlaylistContainerJs = require('./js/playlistContainer.js');
+
+var _jsPlaylistContainerJs2 = _interopRequireDefault(_jsPlaylistContainerJs);
+
+var _jsComponentIDsJs = require('./js/componentIDs.js');
 
 // Default options for the plugin.
-const defaults = {};
+var defaults = {};
 
 // my debugger lets
-let _options,
-    player,
-    adSettings,
+var _options = undefined,
+    player = undefined,
+    adSettings = undefined,
     lastEvent = "",
     currentEvent = "",
-    Modal,
-    playlistModal,
-    child,
-    playlistTitle,
-    data,
-    id,
-    childString;
-
+    Modal = undefined,
+    playlistModal = undefined,
+    child = undefined,
+    playlistTitle = undefined,
+    data = undefined,
+    id = undefined,
+    childString = undefined;
 
 var playlistModalButton = videojs.extend(videojs.Button, {
-    constructor: function(player, options) {
+    constructor: function constructor(player, options) {
 
         videojs.Button.call(this, player, options);
 
-
-        player.on('loadstart', function() {
+        player.on('loadstart', function () {
             console.log(_options);
-
         });
 
         // Bind click event for desktop browsers
-        this.on('click', function() {});
+        this.on('click', function () {});
     },
 
-    createEl: function() {
+    createEl: function createEl() {
         return videojs.Button.prototype.createEl.call(this, 'div', {
             className: 'vjs-playlist-button vjs-menu-button vjs-menu-button-popup vjs-control vjs-button',
-            innerHTML: '<div class="vjs-menu playlistModal vjs-icons-chapters" role="presentation"><ul id="vjs-playlist-menu" class="vjs-playlist-menu vjs-menu-content"role="menu"></ul></div><span class="vjs-control-text">Playlist</span></div>'
+            innerHTML: '<div class="vjs-menu playlistModal vjs-icons-chapters" role="presentation"><ul id="vjs-playlist-menu" class="vjs-playlist-menu vjs-menu-content"role="menu"><div style="text-align:left;">Playlists</div></ul></div><span class="vjs-control-text">Playlist</span></div>'
         }, {
-            'aria-live': 'polite',
+            'aria-live': 'polite'
         });
     }
 });
@@ -61,8 +67,7 @@ function findClass(element, className) {
                     break;
                 }
             }
-            if (found)
-                break;
+            if (found) break;
             recurse(element.childNodes[i], className, found);
         }
     }
@@ -70,11 +75,10 @@ function findClass(element, className) {
     return foundElement;
 }
 
-
-let buildContainer = (player) => {
+var buildContainer = function buildContainer(player) {
     videojs.registerComponent("playlistModalButton", playlistModalButton);
 
-    var buttonIndex = player.controlBar.children().map(function(c) {
+    var buttonIndex = player.controlBar.children().map(function (c) {
         return c.name();
     }).indexOf('FullscreenToggle') - 1;
     player.controlBar.playlistButton = player.controlBar.addChild('playlistModalButton', null, buttonIndex);
@@ -83,45 +87,37 @@ let buildContainer = (player) => {
     playlistModal = findClass(player.controlBar.playlistButton.el_, "vjs-playlist-menu");
     console.log(playlistModal);
     for (var i = 0; i < _options.playlists.length; i++) {
-        player.catalog.getPlaylist(_options.playlists[i].id, function(error, playlist) {
+        player.catalog.getPlaylist(_options.playlists[i].id, function (error, playlist) {
             data = player.catalog.data;
-            childString = "<li class='vjs-playlist-title' id='" + data.id + "'>" + data.name + "</li><ul style='display:none;'>";
+            childString = "<li class='vjs-playlist-title ' id='" + data.id + "'>" + data.name + "</li><ul>";
             for (var j = 0; j < playlist.length; j++) {
-                childString += "<div class='vjs-video-title vjs-menu-item' playlistId='" + data.id + "'id='" + playlist[j].id + "'>" + playlist[j].name +"<img class='vjs-thumbnail' style='pointer-events:none;'src="+playlist[j].thumbnail +"></img></div>";
+                childString += "<div class='vjs-video-title vjs-menu-item' playlistId='" + data.id + "'id='" + playlist[j].id + "'><img class='vjs-thumbnail' src=" + playlist[j].thumbnail + "></img>" + playlist[j].name + "</div>";
             }
             childString += "</ul>";
             playlistModal.innerHTML += childString;
             for (var x = 0; x < playlistModal.childNodes.length; x++) {
                 var temp = playlistModal.childNodes;
-                if (playlistModal.childNodes[x].className === 'vjs-playlist-title') {
-                    playlistModal.childNodes[x].addEventListener('click', function(evt) {
-                        /*player.catalog.getPlaylist(evt.currentTarget.id, function(error, playlist) {
+                if (playlistModal.childNodes[x].className === 'vjs-playlist-title vjs-menu-item') {
+                    playlistModal.childNodes[x].addEventListener('click', function (evt) {
+                        player.catalog.getPlaylist(evt.currentTarget.id, function (error, playlist) {
                             player.catalog.load(playlist);
                             player.playlist.currentItem(0);
                             player.play();
-                        });*/
-                        evt.stopPropagation();
-                        if(evt.target.nextSibling.style.display==="none"){
-                        evt.target.nextSibling.style.display="block";
-                    }else{
-                        evt.target.nextSibling.style.display="none";
-                    }
-
+                        });
                     });
                 } else if (playlistModal.childNodes[x].tagName === 'UL') {
                     var temp = playlistModal.childNodes[x];
                     for (var z = 0; z < temp.childNodes.length; z++) {
-                        temp.childNodes[z].addEventListener('click', function(evt) {
-                            player.catalog.getPlaylist(evt.currentTarget.attributes.playlistId.value, function(error, playlist){
+                        temp.childNodes[z].addEventListener('click', function (evt) {
+                            player.catalog.getPlaylist(evt.currentTarget.attributes.playlistId.value, function (error, playlist) {
                                 player.catalog.load(playlist);
-                                for(var k =0; k < playlist.length; k++){
-                                    if(evt.target.id === playlist[k].id){
+                                for (var k = 0; k < playlist.length; k++) {
+                                    if (evt.target.id === playlist[k].id) {
                                         player.playlist.currentItem(k);
                                         player.play();
                                     }
                                 }
-
-                            })
+                            });
                         });
                     }
                 }
@@ -130,17 +126,14 @@ let buildContainer = (player) => {
     };
 };
 
-
-let setOptions = (opt) => {
+var setOptions = function setOptions(opt) {
     _options = opt;
     if (_options) {
         for (var i = 0; i < _options.playlists.length; i++) {
             console.log(_options.playlists[i].id);
         }
     }
-
 };
-
 
 /**
  * Function to invoke when the player is ready.
@@ -153,7 +146,7 @@ let setOptions = (opt) => {
  * @param    {Player} player
  * @param    {Object} [options={}]
  */
-const onPlayerReady = (bcplayer, options) => {
+var onPlayerReady = function onPlayerReady(bcplayer, options) {
 
     console.log('Brightcove Player multiPlaylist loaded');
 
@@ -161,7 +154,7 @@ const onPlayerReady = (bcplayer, options) => {
 
     //bcplayer.addClass('vjs-player-debugger');
 
-    let fontawesome = document.createElement('link');
+    var fontawesome = document.createElement('link');
     fontawesome.rel = 'stylesheet';
     fontawesome.href = "//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css";
     document.body.appendChild(fontawesome);
@@ -169,7 +162,6 @@ const onPlayerReady = (bcplayer, options) => {
     setOptions(options);
 
     buildContainer(bcplayer);
-
 };
 /**
  * A Brightcove video.js plugin.
@@ -183,11 +175,13 @@ const onPlayerReady = (bcplayer, options) => {
  * @param    {Object} [options={}]
  *           An object of options left to the plugin author to define.
  */
-const multiPlaylist = function(options) {
-    this.ready(() => {
+var multiPlaylist = function multiPlaylist(options) {
+    var _this = this;
+
+    this.ready(function () {
 
         _options = options;
-        onPlayerReady(this, videojs.mergeOptions(defaults, _options));
+        onPlayerReady(_this, videojs.mergeOptions(defaults, _options));
     });
 };
 
@@ -197,4 +191,5 @@ videojs.plugin('multiPlaylist', multiPlaylist);
 // Include the version number.
 multiPlaylist.VERSION = '__VERSION__';
 
-export default multiPlaylist;
+exports['default'] = multiPlaylist;
+module.exports = exports['default'];
