@@ -1,18 +1,9 @@
-'use strict';
+// Default options for the plugin.
+"use strict";
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _jsPlaylistContainerJs = require('./js/playlistContainer.js');
-
-var _jsPlaylistContainerJs2 = _interopRequireDefault(_jsPlaylistContainerJs);
-
-var _jsComponentIDsJs = require('./js/componentIDs.js');
-
-// Default options for the plugin.
 var defaults = {};
 
 // my debugger lets
@@ -87,6 +78,13 @@ var buildContainer = function buildContainer(player) {
     playlistModal = findClass(player.controlBar.playlistButton.el_, "vjs-playlist-menu");
     console.log(playlistModal);
     for (var i = 0; i < _options.playlists.length; i++) {
+        if (i == 0) {
+            player.catalog.getPlaylist(_options.playlists[i].id, function (error, playlist) {
+                player.catalog.load(playlist);
+                player.playlist.currentItem(0);
+                player.play();
+            });
+        }
         player.catalog.getPlaylist(_options.playlists[i].id, function (error, playlist) {
             data = player.catalog.data;
             childString = "<li class='vjs-playlist-title' id='" + data.id + "'>" + data.name + "</li><ul style='display:none;'>";
@@ -99,13 +97,6 @@ var buildContainer = function buildContainer(player) {
                 var temp = playlistModal.childNodes;
                 if (playlistModal.childNodes[x].className === 'vjs-playlist-title') {
                     playlistModal.childNodes[x].addEventListener('click', function (evt) {
-                        if (x = 0) {
-                            player.catalog.getPlaylist(evt.currentTarget.id, function (error, playlist) {
-                                player.catalog.load(playlist);
-                                player.playlist.currentItem(0);
-                                player.play();
-                            });
-                        }
 
                         evt.stopPropagation();
                         if (evt.target.nextSibling.style.display === "none") {
@@ -200,5 +191,5 @@ videojs.plugin('multiPlaylist', multiPlaylist);
 // Include the version number.
 multiPlaylist.VERSION = '__VERSION__';
 
-exports['default'] = multiPlaylist;
-module.exports = exports['default'];
+exports["default"] = multiPlaylist;
+module.exports = exports["default"];

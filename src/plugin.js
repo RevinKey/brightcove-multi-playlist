@@ -1,8 +1,3 @@
-import PlaylistContainer from './js/playlistContainer.js';
-import {
-    IDs
-} from './js/componentIDs.js';
-
 // Default options for the plugin.
 const defaults = {};
 
